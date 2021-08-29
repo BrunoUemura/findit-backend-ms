@@ -1,0 +1,5 @@
+node_modules/
+pgdata/
+.env*
+src/uploads/*
+__tests__/coverage/*
