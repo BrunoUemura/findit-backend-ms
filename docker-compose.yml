@@ -3,7 +3,7 @@ version: "3"
 services:
   db:
     image: postgres:latest
-    container_name: postgres
+    container_name: db-postgres
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
@@ -17,7 +17,7 @@ services:
 
   redis:
     image: redis:latest
-    container_name: redis
+    container_name: db-redis
     command: redis-server --requirepass RedisFindit
     ports:
       - "6379:6379"
@@ -26,7 +26,7 @@ services:
 
   mongo:
     image: mongo:latest
-    container_name: mongo
+    container_name: db-mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: rootpassword
@@ -50,7 +50,7 @@ services:
     ports:
       - "4001"
     volumes:
-      - ./src/uploads:/usr/server/src/uploads
+      - ./ms-users/src/uploads:/usr/server/src/uploads
 
   node-services:
     build:
@@ -97,12 +97,27 @@ services:
     ports:
       - "4004"
 
+  node-emails:
+    build:
+      dockerfile: ./ms-emails/Dockerfile
+      context: .
+    container_name: node-emails
+    depends_on:
+      - db
+      - redis
+      - mongo
+    restart: always
+    networks:
+      - production-network
+    ports:
+      - "4005"
+
   nginx:
     build:
       dockerfile: ./docker/nginx.dockerfile
       context: .
     image: uemurabruno/nginx
-    container_name: nginx
+    container_name: ms-nginx
     ports:
       - "8080:80"
     networks:
@@ -112,6 +127,7 @@ services:
       - node-services
       - node-comments
       - node-chats
+      - node-emails
 
 networks:
   production-network:

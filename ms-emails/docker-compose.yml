@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  node:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    container_name: node-app
+    restart: always
+    ports:
+      - "4001:4001"
