@@ -1,16 +1,8 @@
 FROM node:latest
 LABEL maintainer="Bruno Uemura"
-
-WORKDIR /usr/server
-
-COPY ./ms-users/package*.json ./
+WORKDIR /usr/app
+COPY package*.json ./
 RUN npm install
-
-COPY ./ms-users/. .
-
-COPY ./ms-users/.sequelizerc .
-COPY ./ms-users/.env .
-
-EXPOSE 4001
-
-CMD node src/index.js
+COPY . .
+EXPOSE 4000
+CMD ["npm", "start"]

@@ -13,8 +13,8 @@ In this application the technologies below was used:
 <a href="https://expressjs.com/pt-br/" target="_blank">
   <img src="https://img2.pngio.com/express-js-png-5-png-image-expressjs-png-800_800.png" width="32px" heigth="32px"> 
 </a>
-<a href="https://sequelize.org/" target="_blank">
-  <img src="https://sequelize.org/v3/images/logo-small.png" width="32.52px" heigth="30px">
+<a href="https://typeorm.io/#/" target="_blank">
+  <img src="https://avatars.githubusercontent.com/u/20165699?s=200&v=4" width="32.52px" heigth="30px">
 </a>
 <a href="https://www.postgresql.org/" target="_blank">
   <img src="https://www.postgresql.org/media/img/about/press/elephant.png" width="30px" heigth="30px">
