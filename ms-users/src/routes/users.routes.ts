@@ -8,6 +8,7 @@ export const users = Router();
 
 users
   .get("/users", UsersController.showAllUsers)
+  .post("/users", UsersController.createUser)
   .get("/users/:id", UsersController.showOneUser)
   .get("/users/all/count", UsersController.showUsersCount)
   // .get(
@@ -22,4 +23,10 @@ users
     UsersController.uploadProfileImage
   )
   .put("/users/:id", authMiddleware, UsersController.updateUser)
-  .delete("/users/:id", authMiddleware, UsersController.deleteUser);
+  .delete("/users/:id", authMiddleware, UsersController.deleteUser)
+  .post("/event", (req, res) => {
+    const data = req.body;
+    if (data.type === "User Creaton") {
+      UsersController.createUser;
+    }
+  });

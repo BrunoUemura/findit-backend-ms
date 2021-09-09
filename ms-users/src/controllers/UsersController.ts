@@ -77,6 +77,18 @@ export class UsersController {
     }
   }
 
+  static async createUser(req: Request, res: Response, next: NextFunction) {
+    const userInfo = req.body;
+    const usersService = new UsersService();
+
+    try {
+      const user = await usersService.createUser(userInfo);
+      return res.json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async updateUser(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
     const userInfo = req.body;

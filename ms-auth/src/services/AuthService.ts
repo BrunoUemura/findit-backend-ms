@@ -8,6 +8,7 @@ import { UnauthorizedError } from "../errors/UnauthorizedError";
 import { Auth } from "../models/Auth";
 import { AuthRepository } from "../repositories/AuthRepository";
 import dotenv from "dotenv";
+import axios from "axios";
 dotenv.config();
 
 interface IUsersAuth {
@@ -47,17 +48,24 @@ export class AuthService {
 
     await this.authRepository.save(user);
 
-    const url = this.generateURL("/api/auth/email-confirmation/", user.id);
+    axios.post("http://localhost:3999/api/event", {
+      type: "User Creaton",
+      name,
+      email,
+    });
 
-    const destination = user.email;
-    const subject = "Email Confirmation";
-    const text = `Hi! Please confirm your registration by clicking the URL below: ${url}`;
-    const html = `<h1>Hi!</h1> Please confirm your registration by clicking the URL below:<br></br> <a href="${url}">${url}</a>`;
+    // const url = this.generateURL("/api/auth/email-confirmation/", user.id);
 
-    const emailSender = new EmailSender();
-    const emailSent = emailSender.sendMail(destination, subject, text, html);
+    // const destination = user.email;
+    // const subject = "Email Confirmation";
+    // const text = `Hi! Please confirm your registration by clicking the URL below: ${url}`;
+    // const html = `<h1>Hi!</h1> Please confirm your registration by clicking the URL below:<br></br> <a href="${url}">${url}</a>`;
 
-    return { message: "User registered successfully!", emailSent };
+    // const emailSender = new EmailSender();
+    // const emailSent = emailSender.sendMail(destination, subject, text, html);
+
+    // return { message: "User registered successfully!", emailSent };
+    return { message: "User registered successfully!" };
   }
 
   async confirmRegistration(id: string) {

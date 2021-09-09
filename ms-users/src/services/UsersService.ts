@@ -4,6 +4,7 @@ import { User } from "../models/User";
 import { UsersRepository } from "../repositories/UsersRepository";
 // import { ServicesCompletedRepository } from "../repositories/ServicesCompletedRepository";
 import { NotFoundError } from "../errors/NotFoundError";
+import { BadRequestError } from "../errors/BadRequestError";
 
 interface IUsers {
   name?: string;
@@ -80,6 +81,18 @@ export class UsersService {
     const { user_photo } = userExists[0];
 
     return user_photo;
+  }
+
+  async createUser(userInfo: IUsersCreate) {
+    const userExists = await this.usersRepository.findOne({
+      where: { email: userInfo.email },
+    });
+    if (userExists) {
+      throw new BadRequestError("User already registered");
+    }
+    const user = this.usersRepository.create(userInfo);
+    await this.usersRepository.save(user);
+    return { message: `CREATED user id ${user.id}` };
   }
 
   async updateUser(id: string, userInfo: IUsersCreate) {
