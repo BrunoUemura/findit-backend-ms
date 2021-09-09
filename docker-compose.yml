@@ -1,134 +1,15 @@
-version: "3"
+version: "3.7"
 
 services:
-  db:
-    image: postgres:latest
-    container_name: db-postgres
-    environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_DB: findit
+  rabbitmq:
+    image: "rabbitmq:3.8-management-alpine"
+    container_name: nodejs-rabbitmq-rabbitmq
+    hostname: rabbitmq
     ports:
-      - "5432:5432"
+      - "15672:15672"
+      - "5672:5672"
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
-    networks:
-      - production-network
-
-  redis:
-    image: redis:latest
-    container_name: db-redis
-    command: redis-server --requirepass RedisFindit
-    ports:
-      - "6379:6379"
-    networks:
-      - production-network
-
-  mongo:
-    image: mongo:latest
-    container_name: db-mongo
+      - "./.rabbitmq_data:/var/lib/rabbitmq/mnesia"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
-    ports:
-      - 27017:27017
-    networks:
-      - production-network
-
-  node-users:
-    build:
-      dockerfile: ./ms-users/Dockerfile
-      context: .
-    container_name: node-users
-    depends_on:
-      - db
-      - redis
-      - mongo
-    restart: always
-    networks:
-      - production-network
-    ports:
-      - "4001"
-    volumes:
-      - ./ms-users/src/uploads:/usr/server/src/uploads
-
-  node-services:
-    build:
-      dockerfile: ./ms-services/Dockerfile
-      context: .
-    container_name: node-services
-    depends_on:
-      - db
-      - redis
-      - mongo
-    restart: always
-    networks:
-      - production-network
-    ports:
-      - "4002"
-
-  node-comments:
-    build:
-      dockerfile: ./ms-comments/Dockerfile
-      context: .
-    container_name: node-comments
-    depends_on:
-      - db
-      - redis
-      - mongo
-    restart: always
-    networks:
-      - production-network
-    ports:
-      - "4003"
-
-  node-chats:
-    build:
-      dockerfile: ./ms-chats/Dockerfile
-      context: .
-    container_name: node-chats
-    depends_on:
-      - db
-      - redis
-      - mongo
-    restart: always
-    networks:
-      - production-network
-    ports:
-      - "4004"
-
-  node-emails:
-    build:
-      dockerfile: ./ms-emails/Dockerfile
-      context: .
-    container_name: node-emails
-    depends_on:
-      - db
-      - redis
-      - mongo
-    restart: always
-    networks:
-      - production-network
-    ports:
-      - "4005"
-
-  nginx:
-    build:
-      dockerfile: ./docker/nginx.dockerfile
-      context: .
-    image: uemurabruno/nginx
-    container_name: ms-nginx
-    ports:
-      - "8080:80"
-    networks:
-      - production-network
-    depends_on:
-      - node-users
-      - node-services
-      - node-comments
-      - node-chats
-      - node-emails
-
-networks:
-  production-network:
-    driver: bridge
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin

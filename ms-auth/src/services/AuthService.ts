@@ -9,9 +9,11 @@ import { Auth } from "../models/Auth";
 import { AuthRepository } from "../repositories/AuthRepository";
 import dotenv from "dotenv";
 import axios from "axios";
+import RabbitmqServer from "../rabbitmq-server";
 dotenv.config();
 
 interface IUsersAuth {
+  type?: string;
   name?: string;
   email: string;
   password?: string;
@@ -40,7 +42,7 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = this.authRepository.create({
+    const user: IUsersAuth = this.authRepository.create({
       name,
       email,
       password: hashedPassword,
@@ -48,11 +50,11 @@ export class AuthService {
 
     await this.authRepository.save(user);
 
-    axios.post("http://localhost:3999/api/event", {
-      type: "User Creaton",
-      name,
-      email,
-    });
+    user.type = "UserCreation";
+    const server = new RabbitmqServer("amqp://admin:admin@localhost:5672");
+    await server.start();
+    await server.publishInQueue("user", JSON.stringify(user));
+    await server.publishInExchange("amq.direct", "rota", JSON.stringify(user));
 
     // const url = this.generateURL("/api/auth/email-confirmation/", user.id);
 
