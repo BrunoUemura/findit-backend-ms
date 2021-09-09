@@ -3,12 +3,11 @@ import { User } from "../models/User";
 // import { ServiceCompleted } from "../models/ServiceCompleted";
 import { UsersRepository } from "../repositories/UsersRepository";
 // import { ServicesCompletedRepository } from "../repositories/ServicesCompletedRepository";
-import { NotFound } from "../errors/NotFound";
+import { NotFoundError } from "../errors/NotFoundError";
 
 interface IUsers {
   name?: string;
   email?: string;
-  password?: string;
   user_photo?: string;
   city?: string;
   state?: string;
@@ -16,13 +15,11 @@ interface IUsers {
   phone?: string;
   occupation?: string;
   about_me?: string;
-  email_verified?: boolean;
 }
 
 interface IUsersCreate {
   name: string;
   email: string;
-  password?: string;
   user_photo?: string;
   city?: string;
   state?: string;
@@ -30,7 +27,6 @@ interface IUsersCreate {
   phone?: string;
   occupation?: string;
   about_me?: string;
-  email_verified?: boolean;
 }
 
 export class UsersService {
@@ -50,7 +46,7 @@ export class UsersService {
     });
 
     if (!userExists) {
-      throw new NotFound("User");
+      throw new NotFoundError("User not found");
     }
 
     return userExists;
@@ -69,14 +65,14 @@ export class UsersService {
     return count;
   }
 
-  async showUserCompletedServicesCount(id: string) {
-    // const [list, count] = await this.servicesCompletedRepository.findAndCount({
-    //   where: {
-    //     user_id: id,
-    //   },
-    // });
-    // return count;
-  }
+  // async showUserCompletedServicesCount(id: string) {
+  //   const [list, count] = await this.servicesCompletedRepository.findAndCount({
+  //     where: {
+  //       user_id: id,
+  //     },
+  //   });
+  //   return count;
+  // }
 
   async getProfileImage(id: string) {
     const userExists = await this.checkUserExists(id);

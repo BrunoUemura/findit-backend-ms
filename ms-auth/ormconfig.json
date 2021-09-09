@@ -1,0 +1,10 @@
+{
+  "type": "postgres",
+  "url": "postgresql://postgres:postgres@host.docker.internal:5432/findit_auth",
+  "ssl": false,
+  "entities": ["src/models/**/*.ts"],
+  "migrations": ["src/database/migrations/**/*.ts"],
+  "cli": {
+    "migrationsDir": "src/database/migrations"
+  }
+}

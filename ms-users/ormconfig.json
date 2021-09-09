@@ -1,6 +1,6 @@
 {
   "type": "postgres",
-  "url": "postgresql://postgres:postgres@host.docker.internal:5432/findit",
+  "url": "postgresql://postgres:postgres@host.docker.internal:15432/findit_user",
   "ssl": false,
   "entities": ["src/models/**/*.ts"],
   "migrations": ["src/database/migrations/**/*.ts"],

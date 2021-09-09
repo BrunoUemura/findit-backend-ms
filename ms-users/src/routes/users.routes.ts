@@ -10,10 +10,10 @@ users
   .get("/users", UsersController.showAllUsers)
   .get("/users/:id", UsersController.showOneUser)
   .get("/users/all/count", UsersController.showUsersCount)
-  .get(
-    "/users/:id/completed-services/count",
-    UsersController.showUserCompletedServicesCount
-  )
+  // .get(
+  //   "/users/:id/completed-services/count",
+  //   UsersController.showUserCompletedServicesCount
+  // )
   .get("/users/:id/profile-image", UsersController.getProfileImage)
   .post(
     "/users/:id/profile-image/upload",

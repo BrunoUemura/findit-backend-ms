@@ -9,7 +9,6 @@ export const portfolios = Router();
 portfolios
   .get("/users/all/portfolios", PortfolioController.showAllUsersPortfolios)
   .get("/users/:id/portfolios", PortfolioController.showUserPortfolios)
-  .get("/users/:id/portfolios-image", PortfolioController.getPortfolioImages)
   .get(
     "/users/:id/portfolios-image/:image_id",
     PortfolioController.getPortfolioImage
@@ -17,6 +16,17 @@ portfolios
   .post(
     "/users/:id/portfolios/upload",
     authMiddleware,
-    multer(multerConfig).array("file"),
+    multer(multerConfig).single("file"),
     PortfolioController.uploadPortfolioImages
+  )
+  .put(
+    "/users/:id/portfolios/:image_id",
+    authMiddleware,
+    multer(multerConfig).single("file"),
+    PortfolioController.updatePortfolioImages
+  )
+  .delete(
+    "/users/:id/portfolios/:image_id",
+    authMiddleware,
+    PortfolioController.deletePortfolioImage
   );

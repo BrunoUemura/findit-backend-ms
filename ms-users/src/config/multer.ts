@@ -1,7 +1,7 @@
 import * as multer from "multer";
 import path from "path";
 import crypto from "crypto";
-import { InvalidData } from "../errors/InvalidData";
+import { InvalidDataError } from "../errors/InvalidDataError";
 
 const dest = path.resolve(__dirname, "..", "uploads");
 
@@ -24,7 +24,7 @@ const fileFilter = (req, file, cb) => {
   if (allowedMimes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new InvalidData());
+    cb(new InvalidDataError("Invalid data type"));
   }
 };
 

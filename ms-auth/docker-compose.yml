@@ -1,0 +1,58 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: ms-auth-postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: findit_auth
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    networks:
+      - production-network
+
+  redis:
+    image: redis:latest
+    container_name: ms-auth-redis
+    command: redis-server --requirepass RedisFindit
+    ports:
+      - "6379:6379"
+    networks:
+      - production-network
+
+  app:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    container_name: ms-auth-node
+    depends_on:
+      - postgres
+      - redis
+    restart: always
+    networks:
+      - production-network
+    ports:
+      - "4000:4000"
+
+  # nginx:
+  #   build:
+  #     dockerfile: ./docker/nginx.dockerfile
+  #     context: .
+  #   image: uemurabruno/nginx
+  #   container_name: nginx
+  #   ports:
+  #     - "8080:80"
+  #   networks:
+  #     - production-network
+  #   depends_on:
+  #     - auth-app
+  #     - node2
+  #     - node3
+
+networks:
+  production-network:
+    driver: bridge

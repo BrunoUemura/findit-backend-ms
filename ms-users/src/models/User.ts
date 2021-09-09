@@ -20,9 +20,6 @@ export class User {
   email: string;
 
   @Column()
-  password: string;
-
-  @Column()
   user_photo: string;
 
   @Column()
@@ -43,9 +40,6 @@ export class User {
   @Column()
   about_me: string;
 
-  @Column()
-  email_verified: boolean;
-
   @CreateDateColumn()
   created_at: Date;
 
@@ -56,6 +50,5 @@ export class User {
     if (!this.id) {
       this.id = uuid();
     }
-    this.email_verified = false;
   }
 }

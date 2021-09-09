@@ -21,10 +21,6 @@ export class CreateUsers1619130860522 implements MigrationInterface {
             isUnique: true,
           },
           {
-            name: "password",
-            type: "varchar",
-          },
-          {
             name: "user_photo",
             type: "varchar",
             isNullable: true,
@@ -60,10 +56,6 @@ export class CreateUsers1619130860522 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: "email_verified",
-            type: "boolean",
-          },
-          {
             name: "created_at",
             type: "timestamp",
             default: "now()",
@@ -79,6 +71,6 @@ export class CreateUsers1619130860522 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    queryRunner.dropTable("users");
+    await queryRunner.dropTable("users");
   }
 }
