@@ -20,31 +20,7 @@ export class User {
   email: string;
 
   @Column()
-  password: string;
-
-  @Column()
   user_photo: string;
-
-  @Column()
-  city: string;
-
-  @Column()
-  state: string;
-
-  @Column()
-  country: string;
-
-  @Column()
-  phone: string;
-
-  @Column()
-  occupation: string;
-
-  @Column()
-  about_me: string;
-
-  @Column()
-  email_verified: boolean;
 
   @CreateDateColumn()
   created_at: Date;
@@ -56,6 +32,5 @@ export class User {
     if (!this.id) {
       this.id = uuid();
     }
-    this.email_verified = false;
   }
 }

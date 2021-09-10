@@ -15,35 +15,20 @@ services:
     networks:
       - production-network
 
-  app:
-    build:
-      dockerfile: ./Dockerfile
-      context: .
-    container_name: ms-users-node
-    depends_on:
-      - userdb
-    restart: always
-    networks:
-      - production-network
-    ports:
-      - "4001:4001"
-    volumes:
-      - ./src/uploads:/usr/app/src/uploads
-
-  # nginx:
+  # app:
   #   build:
-  #     dockerfile: ./docker/nginx.dockerfile
+  #     dockerfile: ./Dockerfile
   #     context: .
-  #   image: uemurabruno/nginx
-  #   container_name: nginx
-  #   ports:
-  #     - "8080:80"
+  #   container_name: ms-users-node
+  #   depends_on:
+  #     - userdb
+  #   restart: always
   #   networks:
   #     - production-network
-  #   depends_on:
-  #     - node1
-  #     - node2
-  #     - node3
+  #   ports:
+  #     - "4001:4001"
+  #   volumes:
+  #     - ./src/uploads:/usr/app/src/uploads
 
 networks:
   production-network:

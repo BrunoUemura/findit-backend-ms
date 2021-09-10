@@ -12,7 +12,7 @@ status_code=$(curl --write-out %{http_code} --silent --output /dev/null http://l
 if [[ $status_code -ne 200 ]] ; then
   echo -e "${green}[======== Executing  Migrations ========]${reset}"
   sleep 30
-  docker exec node-1 npm run typeorm migration:run
+  docker exec ms-services-node npm run typeorm migration:run
 else
   echo -e "${green}[======== Migrations already executed ========]${reset}"
   exit 0

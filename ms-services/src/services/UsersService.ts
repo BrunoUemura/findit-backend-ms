@@ -50,36 +50,6 @@ export class UsersService {
     return userExists;
   }
 
-  async showAllUsers() {
-    return await this.usersRepository.find();
-  }
-
-  async showOneUser(id: string) {
-    return await this.usersRepository.findOne(id);
-  }
-
-  async showUsersCount() {
-    const [list, count] = await this.usersRepository.findAndCount();
-    return count;
-  }
-
-  // async showUserCompletedServicesCount(id: string) {
-  //   const [list, count] = await this.servicesCompletedRepository.findAndCount({
-  //     where: {
-  //       user_id: id,
-  //     },
-  //   });
-  //   return count;
-  // }
-
-  async getProfileImage(id: string) {
-    const userExists = await this.checkUserExists(id);
-
-    const { user_photo } = userExists[0];
-
-    return user_photo;
-  }
-
   async createUser(userInfo: IUsersCreate) {
     const userExists = await this.usersRepository.findOne({
       where: { email: userInfo.email },
@@ -94,40 +64,24 @@ export class UsersService {
       email: userInfo.email,
     });
     await this.usersRepository.save(user);
+
     console.log(`CREATED user id ${user.id}`);
     return { message: `CREATED user id ${user.id}` };
   }
 
-  async updateUser(id: string, userInfo: IUsersCreate) {
-    const userExists = await this.usersRepository.findOne(id);
-
+  async updateUser(userInfo: IUsersCreate) {
+    const userExists = await this.usersRepository.findOne(userInfo.id);
     if (!userExists) {
       throw new Error("User does not exist!");
     }
-
-    await this.usersRepository.update(id, userInfo);
-
-    const user: IUsersUpdate = {
-      type: "UserUpdate",
-      id,
-      name: userInfo.name,
-      email: userInfo.email,
-    };
-    const server = new RabbitmqServer("amqp://admin:admin@localhost:5672");
-    await server.start();
-    await server.publishInExchange("amq.direct", "route", JSON.stringify(user));
-
-    return { message: `UPDATED user id ${id}` };
+    await this.usersRepository.update(userInfo.id, userInfo);
+    console.log(`UPDATED user id ${userInfo.id}`);
+    return { message: `UPDATED user id ${userInfo.id}` };
   }
 
   async uploadProfileImage(id: string, filename: string) {
     await this.checkUserExists(id);
     await this.usersRepository.update(id, { user_photo: filename });
     return { message: `UPDATED user id ${id} profile photo` };
-  }
-
-  async deleteUser(id: string) {
-    await this.usersRepository.delete(id);
-    return { message: `DELETED user id ${id}` };
   }
 }

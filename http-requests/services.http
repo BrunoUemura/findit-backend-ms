@@ -1,0 +1,58 @@
+GET http://localhost:4002/api/services
+
+
+###
+
+GET http://localhost:4002/api/services/a03cf2e9-c368-46ef-9504-fb80bfd55299
+
+###
+
+POST http://localhost:4002/api/services
+content-type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYjcwOWM3LTY3MTUtNDc1OC1hNTFjLTllZGJmZDM0YWQ4NSIsImVtYWlsIjoiYnJ1bm8udWVtdXJhQGdtYWlsLmNvbSIsImlhdCI6MTYzMTMxMTMwMywiZXhwIjoxNjMxMzE0OTAzfQ.GiuqYTBmoZfz5oMhGcW9_zTcOBWiuxe14lO7V_bFioA
+
+{
+	"user_id": "fdb709c7-6715-4758-a51c-9edbfd34ad85",
+	"title": "Develop Backend",
+	"category": "Tecnologia",
+	"description": "I need someone to develop a backend service for my app",
+	"price": "1500",
+    "city": "Campinas",
+    "state": "SP",
+    "country": "Brazil"
+}
+
+###
+
+POST http://localhost:4002/api/services/complete
+content-type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJlMzllOWQ5LTgzMTgtNDRiNS1hNWU0LTA2YzE3NDFjYjZkNiIsImVtYWlsIjoibGludXMudG9ydmFsZHNAZ21haWwuY29tIiwiaWF0IjoxNjMxMjQ2MTIwLCJleHAiOjE2MzEyNDk3MjB9.HkJqMOHIUPnxoLE_IWeLRehDKty0dmCpi9IqTXakUrg
+
+{
+	"user_id": "07766223-6858-4f59-bfd1-e17ebfeef904",
+	"service_id": "cd370657-9e55-4d80-8cdb-5a0f33b52461"
+}
+
+###
+
+PUT http://localhost:4002/api/services/a03cf2e9-c368-46ef-9504-fb80bfd55299
+content-type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYjcwOWM3LTY3MTUtNDc1OC1hNTFjLTllZGJmZDM0YWQ4NSIsImVtYWlsIjoiYnJ1bm8udWVtdXJhQGdtYWlsLmNvbSIsImlhdCI6MTYzMTMxMTMwMywiZXhwIjoxNjMxMzE0OTAzfQ.GiuqYTBmoZfz5oMhGcW9_zTcOBWiuxe14lO7V_bFioA
+
+{
+	"title": "Develop Backend Service",
+	"category": "Tecnologia",
+	"description": "I need someone to develop a backend service in microservice for my app",
+	"price": "2000",
+    "city": "Campinas",
+    "state": "SP",
+    "country": "Brazil"
+}
+
+
+
+###
+
+DELETE http://localhost:4002/api/services/9c963039-4d8e-4ed9-8ec1-063f32eafee9
+content-type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYjcwOWM3LTY3MTUtNDc1OC1hNTFjLTllZGJmZDM0YWQ4NSIsImVtYWlsIjoiYnJ1bm8udWVtdXJhQGdtYWlsLmNvbSIsImlhdCI6MTYzMTMxMTMwMywiZXhwIjoxNjMxMzE0OTAzfQ.GiuqYTBmoZfz5oMhGcW9_zTcOBWiuxe14lO7V_bFioA

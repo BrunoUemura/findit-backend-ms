@@ -24,34 +24,19 @@ services:
     networks:
       - production-network
 
-  app:
-    build:
-      dockerfile: ./Dockerfile
-      context: .
-    container_name: ms-auth-node
-    depends_on:
-      - postgres
-      - redis
-    restart: always
-    networks:
-      - production-network
-    ports:
-      - "4000:4000"
-
-  # nginx:
+  # app:
   #   build:
-  #     dockerfile: ./docker/nginx.dockerfile
+  #     dockerfile: ./Dockerfile
   #     context: .
-  #   image: uemurabruno/nginx
-  #   container_name: nginx
-  #   ports:
-  #     - "8080:80"
+  #   container_name: ms-auth-node
+  #   depends_on:
+  #     - postgres
+  #     - redis
+  #   restart: always
   #   networks:
   #     - production-network
-  #   depends_on:
-  #     - auth-app
-  #     - node2
-  #     - node3
+  #   ports:
+  #     - "4000:4000"
 
 networks:
   production-network:
