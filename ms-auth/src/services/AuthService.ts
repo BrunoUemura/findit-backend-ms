@@ -1,18 +1,16 @@
-import { getCustomRepository, Repository } from "typeorm";
+import { Repository, getRepository } from "typeorm";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import blacklist from "../middlewares/handleBlacklist";
-import { EmailSender } from "../utils/emailSender";
 import { BadRequestError } from "../errors/BadRequestError";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
 import { Auth } from "../models/Auth";
-import { AuthRepository } from "../repositories/AuthRepository";
 import dotenv from "dotenv";
-import axios from "axios";
-import RabbitmqServer from "../rabbitmq-server";
+import RabbitmqServer from "../config/rabbitmq-server";
 dotenv.config();
 
 interface IUsersAuth {
+  id?: string;
   type?: string;
   name?: string;
   email: string;
@@ -23,7 +21,7 @@ export class AuthService {
   private authRepository: Repository<Auth>;
 
   constructor() {
-    this.authRepository = getCustomRepository(AuthRepository);
+    this.authRepository = getRepository(Auth);
   }
 
   generateURL(route: string, id: string) {
@@ -50,24 +48,24 @@ export class AuthService {
 
     await this.authRepository.save(user);
 
+    // Send new user and email request to RabbitMQ
     user.type = "UserCreation";
+    const url = this.generateURL("/api/auth/email-confirmation/", user.id);
+    const emailObject = {
+      type: user.type,
+      destination: user.email,
+      subject: "Email Confirmation",
+      text: `Hi! Please confirm your registration by clicking the URL below: ${url}`,
+      html: `<h1>Hi!</h1> Please confirm your registration by clicking the URL below:<br></br> <a href="${url}">${url}</a>`,
+    };
+
     const server = new RabbitmqServer("amqp://admin:admin@localhost:5672");
     await server.start();
     await server.publishInQueue("user", JSON.stringify(user));
+    // await server.publishInQueue("email", JSON.stringify(emailObject));
     await server.publishInExchange("amq.direct", "rota", JSON.stringify(user));
 
-    // const url = this.generateURL("/api/auth/email-confirmation/", user.id);
-
-    // const destination = user.email;
-    // const subject = "Email Confirmation";
-    // const text = `Hi! Please confirm your registration by clicking the URL below: ${url}`;
-    // const html = `<h1>Hi!</h1> Please confirm your registration by clicking the URL below:<br></br> <a href="${url}">${url}</a>`;
-
-    // const emailSender = new EmailSender();
-    // const emailSent = emailSender.sendMail(destination, subject, text, html);
-
-    // return { message: "User registered successfully!", emailSent };
-    return { message: "User registered successfully!" };
+    return { message: "User registered successfully" };
   }
 
   async confirmRegistration(id: string) {
@@ -122,5 +120,13 @@ export class AuthService {
     } catch (error) {
       throw new BadRequestError(error.message);
     }
+  }
+
+  async updateUser(userToUpdate: IUsersAuth) {
+    await this.authRepository.update(userToUpdate.id, {
+      name: userToUpdate.name,
+    });
+    console.log(`UPDATED user id ${userToUpdate.id}`);
+    return { message: `UPDATED user id ${userToUpdate.id}` };
   }
 }

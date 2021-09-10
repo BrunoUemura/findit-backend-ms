@@ -4,8 +4,8 @@ import logger from "morgan";
 import "./database";
 import { routes } from "./routes";
 import { errorHandler } from "./middlewares/errorHandler";
-import RabbitmqServer from "./rabbitmq-server";
-import { RabbitmqService } from "./services/RabbitmqService";
+import RabbitmqServer from "./config/rabbitmq-server";
+import { RabbitmqController } from "./controllers/RabbitmqController";
 
 export const app = express();
 
@@ -20,9 +20,8 @@ const consumer = async () => {
   const server = new RabbitmqServer("amqp://admin:admin@localhost:5672");
   await server.start();
   await server.consume("user", (message) => {
-    const userObject = JSON.parse(message.content.toString());
-    const rabbitmqService = new RabbitmqService();
-    rabbitmqService.createUser(userObject);
+    const object = JSON.parse(message.content.toString());
+    RabbitmqController.handleEvent(object);
   });
 };
 

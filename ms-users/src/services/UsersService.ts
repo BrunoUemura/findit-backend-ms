@@ -1,24 +1,21 @@
-import { getCustomRepository, Repository } from "typeorm";
+import { Repository, getRepository } from "typeorm";
 import { User } from "../models/User";
 // import { ServiceCompleted } from "../models/ServiceCompleted";
-import { UsersRepository } from "../repositories/UsersRepository";
 // import { ServicesCompletedRepository } from "../repositories/ServicesCompletedRepository";
 import { NotFoundError } from "../errors/NotFoundError";
 import { BadRequestError } from "../errors/BadRequestError";
+import RabbitmqServer from "../config/rabbitmq-server";
 
-interface IUsers {
+interface IUsersUpdate {
+  type?: string;
+  id?: string;
   name?: string;
   email?: string;
-  user_photo?: string;
-  city?: string;
-  state?: string;
-  country?: string;
-  phone?: string;
-  occupation?: string;
-  about_me?: string;
+  password?: string;
 }
 
 interface IUsersCreate {
+  id?: string;
   name: string;
   email: string;
   user_photo?: string;
@@ -35,7 +32,7 @@ export class UsersService {
   // private servicesCompletedRepository: Repository<ServiceCompleted>;
 
   constructor() {
-    this.usersRepository = getCustomRepository(UsersRepository);
+    this.usersRepository = getRepository(User);
     // this.servicesCompletedRepository = getCustomRepository(
     //   ServicesCompletedRepository
     // );
@@ -90,7 +87,12 @@ export class UsersService {
     if (userExists) {
       throw new BadRequestError("User already registered");
     }
-    const user = this.usersRepository.create(userInfo);
+
+    const user = this.usersRepository.create({
+      id: userInfo.id,
+      name: userInfo.name,
+      email: userInfo.email,
+    });
     await this.usersRepository.save(user);
     return { message: `CREATED user id ${user.id}` };
   }
@@ -103,6 +105,18 @@ export class UsersService {
     }
 
     await this.usersRepository.update(id, userInfo);
+
+    const user: IUsersUpdate = {
+      type: "UserUpdate",
+      id,
+      name: userInfo.name,
+      email: userInfo.email,
+    };
+    const server = new RabbitmqServer("amqp://admin:admin@localhost:5672");
+    await server.start();
+    await server.publishInQueue("auth", JSON.stringify(user));
+    // await server.publishInQueue("email", JSON.stringify(emailObject));
+    await server.publishInExchange("amq.direct", "rota", JSON.stringify(user));
 
     return { message: `UPDATED user id ${id}` };
   }
