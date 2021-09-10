@@ -17,7 +17,7 @@ export class RabbitmqController {
       return;
     }
 
-    console.log(`No action`);
+    console.log(`No action on event`);
     return;
   }
 }

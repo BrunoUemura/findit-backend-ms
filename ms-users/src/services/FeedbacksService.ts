@@ -1,8 +1,6 @@
-import { getCustomRepository, Repository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 import { UserFeedback } from "../models/UserFeedback";
 import { User } from "../models/User";
-import { UsersFeedbacksRepository } from "../repositories/UsersFeedbacksRepository";
-import { UsersRepository } from "../repositories/UsersRepository";
 import { NotFoundError } from "../errors/NotFoundError";
 
 interface ICreateFeedback {
@@ -16,10 +14,8 @@ export class FeedbacksService {
   private usersRepository: Repository<User>;
 
   constructor() {
-    this.usersFeedbacksRepository = getCustomRepository(
-      UsersFeedbacksRepository
-    );
-    this.usersRepository = getCustomRepository(UsersRepository);
+    this.usersFeedbacksRepository = getRepository(UserFeedback);
+    this.usersRepository = getRepository(User);
   }
 
   async showAllUsersFeedbacks() {

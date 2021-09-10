@@ -1,8 +1,6 @@
-import { getCustomRepository, Repository } from "typeorm";
+import { Repository, getRepository } from "typeorm";
 import { Portfolio } from "../models/Portfolio";
 import { User } from "../models/User";
-import { PortfoliosRepository } from "../repositories/PortfoliosRepository";
-import { UsersRepository } from "../repositories/UsersRepository";
 import { NotFoundError } from "../errors/NotFoundError";
 import { BadRequestError } from "../errors/BadRequestError";
 
@@ -11,8 +9,8 @@ export class PortfolioService {
   private usersRepository: Repository<User>;
 
   constructor() {
-    this.portfoliosRepository = getCustomRepository(PortfoliosRepository);
-    this.usersRepository = getCustomRepository(UsersRepository);
+    this.portfoliosRepository = getRepository(Portfolio);
+    this.usersRepository = getRepository(User);
   }
 
   async showAllUsersPortfolios() {

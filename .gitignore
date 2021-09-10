@@ -3,3 +3,4 @@ pgdata/
 .env*
 src/uploads/*
 __tests__/coverage/*
+.rabbitmq_data
