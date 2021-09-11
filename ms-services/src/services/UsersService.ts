@@ -4,15 +4,6 @@ import { User } from "../models/User";
 // import { ServicesCompletedRepository } from "../repositories/ServicesCompletedRepository";
 import { NotFoundError } from "../errors/NotFoundError";
 import { BadRequestError } from "../errors/BadRequestError";
-import RabbitmqServer from "../config/rabbitmq-server";
-
-interface IUsersUpdate {
-  type?: string;
-  id?: string;
-  name?: string;
-  email?: string;
-  password?: string;
-}
 
 interface IUsersCreate {
   id?: string;
@@ -27,6 +18,19 @@ interface IUsersCreate {
   about_me?: string;
 }
 
+interface IUsersUpdate {
+  type?: string;
+  id?: string;
+  name?: string;
+  email?: string;
+  password?: string;
+}
+
+interface IUsersDelete {
+  type: string;
+  id: string;
+}
+
 export class UsersService {
   private usersRepository: Repository<User>;
   // private servicesCompletedRepository: Repository<ServiceCompleted>;
@@ -36,18 +40,6 @@ export class UsersService {
     // this.servicesCompletedRepository = getCustomRepository(
     //   ServicesCompletedRepository
     // );
-  }
-
-  async checkUserExists(id: string) {
-    const userExists = await this.usersRepository.find({
-      where: { id },
-    });
-
-    if (!userExists) {
-      throw new NotFoundError("User not found");
-    }
-
-    return userExists;
   }
 
   async createUser(userInfo: IUsersCreate) {
@@ -69,19 +61,21 @@ export class UsersService {
     return { message: `CREATED user id ${user.id}` };
   }
 
-  async updateUser(userInfo: IUsersCreate) {
-    const userExists = await this.usersRepository.findOne(userInfo.id);
-    if (!userExists) {
-      throw new Error("User does not exist!");
-    }
-    await this.usersRepository.update(userInfo.id, userInfo);
-    console.log(`UPDATED user id ${userInfo.id}`);
-    return { message: `UPDATED user id ${userInfo.id}` };
+  async updateUser(userToUpdate: IUsersUpdate) {
+    await this.usersRepository.update(userToUpdate.id, {
+      name: userToUpdate.name,
+    });
+    console.log(`UPDATED user id ${userToUpdate.id}`);
+    return { message: `UPDATED user id ${userToUpdate.id}` };
   }
 
-  async uploadProfileImage(id: string, filename: string) {
-    await this.checkUserExists(id);
-    await this.usersRepository.update(id, { user_photo: filename });
-    return { message: `UPDATED user id ${id} profile photo` };
+  async deleteUser(userToDelete: IUsersDelete) {
+    const userToRemove = await this.usersRepository.findOne(userToDelete.id);
+    if (!userToRemove) {
+      throw new NotFoundError("User not found");
+    }
+    await this.usersRepository.softRemove(userToRemove);
+    console.log(`DELETED user id ${userToRemove.id}`);
+    return { message: `DELETED user id ${userToRemove.id}` };
   }
 }

@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryColumn,
+  DeleteDateColumn,
 } from "typeorm";
 
 import { v4 as uuid } from "uuid";
@@ -30,6 +31,9 @@ export class Auth {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @DeleteDateColumn({ default: null })
+  deleted_at: Date;
 
   constructor() {
     if (!this.id) {

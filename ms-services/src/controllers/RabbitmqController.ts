@@ -10,19 +10,24 @@ interface IUsersCreate {
 
 export class RabbitmqController {
   static async handleEvent(message: IUsersCreate) {
-    if (message.type === "UserCreation") {
-      const userService = new UsersService();
-      userService.createUser(message);
-      return;
-    }
+    const usersService = new UsersService();
 
-    if (message.type === "UserUpdate") {
-      const usersService = new UsersService();
-      usersService.updateUser(message);
-      return;
-    }
+    switch (message.type) {
+      case "UserCreation":
+        await usersService.createUser(message);
+        break;
 
-    console.log(`No action on event`);
-    return;
+      case "UserUpdate":
+        await usersService.updateUser(message);
+        break;
+
+      case "UserDelete":
+        await usersService.deleteUser(message);
+        break;
+
+      default:
+        console.log(`No action on event`);
+        break;
+    }
   }
 }

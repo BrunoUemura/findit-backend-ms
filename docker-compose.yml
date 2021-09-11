@@ -67,6 +67,20 @@ services:
     networks:
       - production-network
 
+  chat-db:
+    image: postgres:latest
+    container_name: postgres-chat
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: findit_chat
+    ports:
+      - "35432:5432"
+    volumes:
+      - ./pgdata_chat:/var/lib/postgresql/data
+    networks:
+      - production-network
+
 networks:
   production-network:
     driver: bridge

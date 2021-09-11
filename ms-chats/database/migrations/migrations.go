@@ -8,4 +8,5 @@ import (
 func RunMigrations(db *gorm.DB) {
 	db.AutoMigrate(models.Chat{})
 	db.AutoMigrate(models.Message{})
+	db.AutoMigrate(models.User{})
 }

@@ -38,6 +38,11 @@ export class CreateAuth1631147753452 implements MigrationInterface {
             type: "timestamp",
             default: "now()",
           },
+          {
+            name: "deleted_at",
+            type: "timestamp",
+            isNullable: true,
+          },
         ],
       })
     );

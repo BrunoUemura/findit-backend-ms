@@ -10,14 +10,16 @@ interface IUsersCreate {
 
 export class RabbitmqController {
   static async handleEvent(message: IUsersCreate) {
-    // Check event type
-    if (message.type === "UserCreation") {
-      const userService = new UsersService();
-      userService.createUser(message);
-      return;
-    }
+    const usersService = new UsersService();
 
-    console.log(`No action on event`);
-    return;
+    switch (message.type) {
+      case "UserCreation":
+        await usersService.createUser(message);
+        break;
+
+      default:
+        console.log(`No action on event`);
+        break;
+    }
   }
 }

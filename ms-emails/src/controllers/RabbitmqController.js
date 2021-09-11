@@ -2,13 +2,14 @@ import { sendEmail } from "./EmailSenderController.js";
 
 export class RabbitmqController {
   static async handleEvent(message) {
-    // Check event type
-    if (message.type === "UserCreation") {
-      sendEmail(message);
-      return;
-    }
+    switch (message.type) {
+      case "UserCreation":
+        sendEmail(message);
+        break;
 
-    console.log(`No action on event`);
-    return;
+      default:
+        console.log(`No action on event`);
+        break;
+    }
   }
 }

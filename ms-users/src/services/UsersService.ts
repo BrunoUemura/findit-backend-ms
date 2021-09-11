@@ -6,14 +6,6 @@ import { NotFoundError } from "../errors/NotFoundError";
 import { BadRequestError } from "../errors/BadRequestError";
 import RabbitmqServer from "../config/rabbitmq-server";
 
-interface IUsersUpdate {
-  type?: string;
-  id?: string;
-  name?: string;
-  email?: string;
-  password?: string;
-}
-
 interface IUsersCreate {
   id?: string;
   name: string;
@@ -25,6 +17,19 @@ interface IUsersCreate {
   phone?: string;
   occupation?: string;
   about_me?: string;
+}
+
+interface IUsersUpdate {
+  type?: string;
+  id?: string;
+  name?: string;
+  email?: string;
+  password?: string;
+}
+
+interface IUsersDelete {
+  type: string;
+  id: string;
 }
 
 export class UsersService {
@@ -127,7 +132,21 @@ export class UsersService {
   }
 
   async deleteUser(id: string) {
-    await this.usersRepository.delete(id);
+    const userToRemove = await this.usersRepository.findOne(id);
+    if (!userToRemove) {
+      throw new NotFoundError("User not found");
+    }
+
+    await this.usersRepository.softRemove(userToRemove);
+
+    const user: IUsersDelete = {
+      type: "UserDelete",
+      id,
+    };
+    const server = new RabbitmqServer("amqp://admin:admin@localhost:5672");
+    await server.start();
+    await server.publishInExchange("amq.direct", "route", JSON.stringify(user));
+
     return { message: `DELETED user id ${id}` };
   }
 }
