@@ -1,8 +1,8 @@
-FROM golang:1.16
-WORKDIR /app
-COPY go.mod .
-COPY go.sum .
-RUN go mod download
+FROM node:latest
+LABEL maintainer="Bruno Uemura"
+WORKDIR /usr/app
+COPY package*.json ./
+RUN npm install
 COPY . .
-RUN go build
-CMD ["./ms-chats"]
+EXPOSE 4004
+CMD ["npm", "start"]
