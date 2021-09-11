@@ -2,15 +2,15 @@ GET http://localhost:4004/api/chats
 
 #####################################################
 
-GET http://localhost:4004/api/chatsById/
+GET http://localhost:4004/api/chatsById/cab8e028-ed9f-43a0-a18f-a4bf52bf125a
 
 #####################################################
 
-GET http://localhost:4004/api/chatsByUser/:id
+GET http://localhost:4004/api/chatsByUser/0862ba64-cc49-4e34-b82e-430a8415a8c4
 
 #####################################################
 
-GET http://localhost:4004/api/chat/messages/:id
+GET http://localhost:4004/api/chat/messages/cab8e028-ed9f-43a0-a18f-a4bf52bf125a
 
 #####################################################
 
@@ -24,7 +24,7 @@ content-type: application/json
 
 #####################################################
 
-POST http://localhost:4004/api/chat/send-message/:id
+POST http://localhost:4004/api/chat/send-message/cab8e028-ed9f-43a0-a18f-a4bf52bf125a
 content-type: application/json
 
 {

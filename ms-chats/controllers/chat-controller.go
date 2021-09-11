@@ -25,18 +25,10 @@ func ShowChats(c *gin.Context) {
 func ShowChatById(c *gin.Context) {
 	id := c.Param("id")
 
-	// newid, err := strconv.Atoi(id)
-	// if err != nil {
-	// 	c.JSON(400, gin.H{
-	// 		"error": "ID has to be integer",
-	// 	})
-	// 	return
-	// }
-
 	db := database.GetDatabase()
 
 	var chat models.Chat
-	err := db.First(&chat, id).Error
+	err := db.First(&chat, "id = ?", id).Error
 	if err != nil {
 		c.JSON(400, gin.H{
 			"error": "Cannot find chat: " + err.Error(),
@@ -50,18 +42,10 @@ func ShowChatById(c *gin.Context) {
 func ShowChatsByUserId(c *gin.Context) {
 	id := c.Param("id")
 
-	// newid, err := strconv.Atoi(id)
-	// if err != nil {
-	// 	c.JSON(400, gin.H{
-	// 		"error": "ID has to be integer",
-	// 	})
-	// 	return
-	// }
-
 	db := database.GetDatabase()
 
-	var chat models.Chat
-	err := db.First(&chat.SenderId, id).Error
+	var chat []models.Chat
+	err := db.Where("sender_id = ?", id).Or("receiver_id = ?", id).Find(&chat).Error
 	if err != nil {
 		c.JSON(400, gin.H{
 			"error": "Cannot find chat: " + err.Error(),
@@ -75,18 +59,10 @@ func ShowChatsByUserId(c *gin.Context) {
 func ShowMessagesFromChat(c *gin.Context) {
 	id := c.Param("id")
 
-	// newid, err := strconv.Atoi(id)
-	// if err != nil {
-	// 	c.JSON(400, gin.H{
-	// 		"error": "ID has to be integer",
-	// 	})
-	// 	return
-	// }
-
 	db := database.GetDatabase()
 
-	var message models.Message
-	err := db.Find(&message.ChatId, id).Error
+	var message []models.Message
+	err := db.Find(&message, "chat_id = ?", id).Error
 	if err != nil {
 		c.JSON(400, gin.H{
 			"error": "Cannot find messages: " + err.Error(),
@@ -122,9 +98,11 @@ func CreateChatRoom(c *gin.Context) {
 }
 
 func CreateMessage(c *gin.Context) {
+	id := c.Param("id")
 	db := database.GetDatabase()
 
 	var message models.Message
+	message.ChatId = id
 
 	err := c.ShouldBindJSON(&message)
 	if err != nil {
