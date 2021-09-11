@@ -2,6 +2,7 @@ package database
 
 import (
 	"log"
+	"os"
 	"time"
 
 	"github.com/BrunoUemura/findit-backend-ms/tree/master/ms-chats/database/migrations"
@@ -12,7 +13,7 @@ import (
 var db *gorm.DB
 
 func StartDB() {
-	str := "host=localhost port=35432 user=postgres dbname=findit_chat sslmode=disable password=postgres"
+	str := os.Getenv("DB_INFO")
 
 	database, err := gorm.Open(postgres.Open(str), &gorm.Config{})
 	if err != nil {
