@@ -59,7 +59,7 @@ export class AuthService {
       html: `<h1>Hi!</h1> Please confirm your registration by clicking the URL below:<br></br> <a href="${url}">${url}</a>`,
     };
 
-    const server = new RabbitmqServer("amqp://admin:admin@localhost:5672");
+    const server = new RabbitmqServer(process.env.RABBITMQ_URL);
     await server.start();
     await server.publishInExchange("amq.direct", "route", JSON.stringify(user));
 

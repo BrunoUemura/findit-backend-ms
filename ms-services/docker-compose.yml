@@ -1,9 +1,9 @@
 version: "3.7"
 
 services:
-  postgres:
+  postgres-services:
     image: postgres:latest
-    container_name: ms-services-postgres
+    container_name: postgres-services
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
@@ -15,18 +15,18 @@ services:
     networks:
       - production-network
 
-  # app:
-  #   build:
-  #     dockerfile: ./Dockerfile
-  #     context: .
-  #   container_name: ms-services-node
-  #   depends_on:
-  #     - postgres
-  #   restart: always
-  #   networks:
-  #     - production-network
-  #   ports:
-  #     - "4004:4004"
+  ms-services:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    container_name: ms-services
+    depends_on:
+      - postgres-services
+    restart: always
+    networks:
+      - production-network
+    ports:
+      - "4002:4002"
 
 networks:
   production-network:

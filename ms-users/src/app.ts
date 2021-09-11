@@ -4,7 +4,6 @@ import logger from "morgan";
 import "./database";
 import { routes } from "./routes";
 import { errorHandler } from "./middlewares/errorHandler";
-import { rabbitmqConsumer } from "./middlewares/rabbitmqConsumer";
 
 export const app = express();
 
@@ -14,5 +13,3 @@ app.use(express.urlencoded({ extended: false }));
 app.use(logger("dev"));
 app.use(routes);
 app.use(errorHandler);
-
-rabbitmqConsumer();

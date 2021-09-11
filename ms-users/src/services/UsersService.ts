@@ -118,7 +118,7 @@ export class UsersService {
       name: userInfo.name,
       email: userInfo.email,
     };
-    const server = new RabbitmqServer("amqp://admin:admin@localhost:5672");
+    const server = new RabbitmqServer(process.env.RABBITMQ_URL);
     await server.start();
     await server.publishInExchange("amq.direct", "route", JSON.stringify(user));
 
@@ -143,7 +143,7 @@ export class UsersService {
       type: "UserDelete",
       id,
     };
-    const server = new RabbitmqServer("amqp://admin:admin@localhost:5672");
+    const server = new RabbitmqServer(process.env.RABBITMQ_URL);
     await server.start();
     await server.publishInExchange("amq.direct", "route", JSON.stringify(user));
 

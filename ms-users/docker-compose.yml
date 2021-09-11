@@ -1,9 +1,9 @@
 version: "3.7"
 
 services:
-  userdb:
+  postgres-users:
     image: postgres:latest
-    container_name: ms-users-postgres
+    container_name: postgres-users
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
@@ -15,20 +15,20 @@ services:
     networks:
       - production-network
 
-  # app:
-  #   build:
-  #     dockerfile: ./Dockerfile
-  #     context: .
-  #   container_name: ms-users-node
-  #   depends_on:
-  #     - userdb
-  #   restart: always
-  #   networks:
-  #     - production-network
-  #   ports:
-  #     - "4001:4001"
-  #   volumes:
-  #     - ./src/uploads:/usr/app/src/uploads
+  ms-users:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    container_name: ms-users
+    depends_on:
+      - postgres-users
+    restart: always
+    networks:
+      - production-network
+    ports:
+      - "4001:4001"
+    volumes:
+      - ./src/uploads:/usr/app/src/uploads
 
 networks:
   production-network:
