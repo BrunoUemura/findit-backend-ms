@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  postgres-chats:
+    image: postgres:latest
+    container_name: postgres-chats
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: findit_chat
+    ports:
+      - "35432:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    networks:
+      - production-network
+
+  # ms-chats:
+  #   build:
+  #     dockerfile: ./Dockerfile
+  #     context: .
+  #   container_name: ms-chats
+  #   depends_on:
+  #     - postgres-chats
+  #   restart: always
+  #   ports:
+  #     - "5000:5000"
+  #   networks:
+  #     - production-network
+
+networks:
+  production-network:
+    driver: bridge

@@ -2,11 +2,12 @@ package routes
 
 import (
 	"github.com/BrunoUemura/findit-backend-ms/tree/master/ms-chats/controllers"
+	"github.com/BrunoUemura/findit-backend-ms/tree/master/ms-chats/server/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
 func ChatRoutes(router *gin.Engine) {
-	chats := router.Group("api")
+	chats := router.Group("api", middlewares.Auth())
 	{
 		chats.GET("/chats", controllers.ShowChats)
 		chats.GET("/chatsById/:id", controllers.ShowChatById)

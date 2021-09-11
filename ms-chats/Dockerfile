@@ -5,4 +5,4 @@ COPY go.sum .
 RUN go mod download
 COPY . .
 RUN go build
-CMD ["./golang-rest-api"]
+CMD ["./ms-chats"]
