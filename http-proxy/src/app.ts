@@ -29,6 +29,7 @@ app.use(morgan("dev"));
 app.use("/api/auth", createProxyMiddleware(microservices.auth));
 app.use("/api/users", createProxyMiddleware(microservices.users));
 app.use("/api/services", createProxyMiddleware(microservices.services));
+app.use("/api/categories", createProxyMiddleware(microservices.services));
 app.use("/api/chats", createProxyMiddleware(microservices.chats));
 
 export default app;

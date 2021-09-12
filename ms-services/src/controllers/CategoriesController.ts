@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { CategoriesService } from "../services/CategoriesService";
-import { StatusCodes } from "http-status-codes";
 
 export class CategoriesController {
   static async showAllCategories(
