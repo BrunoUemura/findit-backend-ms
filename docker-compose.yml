@@ -35,7 +35,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./ms-auth/pgdata:/var/lib/postgresql/data
+      - ./pgdata_auth:/var/lib/postgresql/data
     networks:
       - production-network
 
@@ -71,7 +71,7 @@ services:
     ports:
       - "15432:5432"
     volumes:
-      - ./ms-users/pgdata:/var/lib/postgresql/data
+      - ./pgdata_users:/var/lib/postgresql/data
     networks:
       - production-network
 
@@ -99,7 +99,7 @@ services:
     ports:
       - "25432:5432"
     volumes:
-      - ./ms-services/pgdata:/var/lib/postgresql/data
+      - ./pgdata_services:/var/lib/postgresql/data
     networks:
       - production-network
 
@@ -125,7 +125,7 @@ services:
     ports:
       - "35432:5432"
     volumes:
-      - ./ms-chats/pgdata:/var/lib/postgresql/data
+      - ./pgdata_chats:/var/lib/postgresql/data
     networks:
       - production-network
 
