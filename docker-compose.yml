@@ -16,6 +16,16 @@ services:
     networks:
       - production-network
 
+  api-gateway:
+    build:
+      dockerfile: ./http-proxy/Dockerfile
+      context: .
+    container_name: api-gateway
+    networks:
+      - production-network
+    ports:
+      - "8080:8080"
+
 networks:
   production-network:
     driver: bridge
