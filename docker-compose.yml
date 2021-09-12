@@ -17,14 +17,129 @@ services:
       - production-network
 
   api-gateway:
-    build:
-      dockerfile: ./http-proxy/Dockerfile
-      context: .
+    build: ./http-proxy
+    entrypoint: ./.docker/entrypoint.sh
     container_name: api-gateway
     networks:
       - production-network
     ports:
       - "8080:8080"
+
+  postgres-auth:
+    image: postgres:latest
+    container_name: postgres-auth
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: findit_auth
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./ms-auth/pgdata:/var/lib/postgresql/data
+    networks:
+      - production-network
+
+  redis-auth:
+    image: redis:latest
+    container_name: redis-auth
+    command: redis-server --requirepass RedisFindit
+    ports:
+      - "6379:6379"
+    networks:
+      - production-network
+
+  ms-auth:
+    build: ./ms-auth
+    entrypoint: ./.docker/entrypoint.sh
+    container_name: ms-auth
+    depends_on:
+      - postgres-auth
+      - redis-auth
+    restart: always
+    networks:
+      - production-network
+    ports:
+      - "4000:4000"
+
+  postgres-users:
+    image: postgres:latest
+    container_name: postgres-users
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: findit_user
+    ports:
+      - "15432:5432"
+    volumes:
+      - ./ms-users/pgdata:/var/lib/postgresql/data
+    networks:
+      - production-network
+
+  ms-users:
+    build: ./ms-users
+    entrypoint: ./.docker/entrypoint.sh
+    container_name: ms-users
+    depends_on:
+      - postgres-users
+    restart: always
+    networks:
+      - production-network
+    ports:
+      - "4001:4001"
+    volumes:
+      - ./ms-users/src/uploads:/usr/app/src/uploads
+
+  postgres-services:
+    image: postgres:latest
+    container_name: postgres-services
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: findit_service
+    ports:
+      - "25432:5432"
+    volumes:
+      - ./ms-services/pgdata:/var/lib/postgresql/data
+    networks:
+      - production-network
+
+  ms-services:
+    build: ./ms-services
+    entrypoint: ./.docker/entrypoint.sh
+    container_name: ms-services
+    depends_on:
+      - postgres-services
+    restart: always
+    networks:
+      - production-network
+    ports:
+      - "4002:4002"
+
+  postgres-chats:
+    image: postgres:latest
+    container_name: postgres-chats
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: findit_chat
+    ports:
+      - "35432:5432"
+    volumes:
+      - ./ms-chats/pgdata:/var/lib/postgresql/data
+    networks:
+      - production-network
+
+  ms-chats:
+    build: ./ms-chats
+    entrypoint: ./.docker/entrypoint.sh
+    container_name: ms-chats
+    depends_on:
+      - postgres-chats
+    restart: always
+    networks:
+      - production-network
+    ports:
+      - "4004:4004"
 
 networks:
   production-network:
