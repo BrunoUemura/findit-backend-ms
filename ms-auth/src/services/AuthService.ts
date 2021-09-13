@@ -61,6 +61,7 @@ export class AuthService {
 
     const server = new RabbitmqServer(process.env.RABBITMQ_URL);
     await server.start();
+    await server.publishInQueue("email", JSON.stringify(emailObject));
     await server.publishInExchange("amq.direct", "route", JSON.stringify(user));
 
     return { message: "User registered successfully" };

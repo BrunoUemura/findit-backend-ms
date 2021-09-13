@@ -25,8 +25,10 @@ export async function sendEmail(message) {
     })
     .then((result) => {
       console.log("Email sent");
+      console.log(result);
     })
     .catch((error) => {
       console.log("Email sending failed");
+      console.log(error);
     });
 }

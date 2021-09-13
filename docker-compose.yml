@@ -141,6 +141,16 @@ services:
     ports:
       - "4004:4004"
 
+  ms-emails:
+    build: ./ms-emails
+    entrypoint: ./.docker/entrypoint.sh
+    container_name: ms-emails
+    restart: always
+    networks:
+      - production-network
+    ports:
+      - "4003:4003"
+
 networks:
   production-network:
     driver: bridge
