@@ -17,21 +17,25 @@ const messageValidation = [
 
 chats
   .get("/chats", authMiddleware, ChatsController.showAllChatRooms)
-  .get("/chatsById/:id", authMiddleware, ChatsController.showAllChatRoomsById)
   .get(
-    "/chatsByUser/:id",
+    "/chats/chatsbyId/:id",
+    authMiddleware,
+    ChatsController.showAllChatRoomsById
+  )
+  .get(
+    "/chats/chatsByUser/:id",
     authMiddleware,
     ChatsController.showAllChatRoomsByUser
   )
-  .get("/chat/messages/:id", authMiddleware, ChatsController.showAllMessages)
+  .get("/chats/messages/:id", authMiddleware, ChatsController.showAllMessages)
   .post(
-    "/chat/create-chat",
+    "/chats/create-chat",
     authMiddleware,
     chatValidation,
     ChatsController.createChatRoom
   )
   .post(
-    "/chat/send-message/:id",
+    "/chats/send-message/:id",
     authMiddleware,
     messageValidation,
     ChatsController.sendMessage
