@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 services:
   rabbitmq:
@@ -9,7 +9,7 @@ services:
       - "15672:15672"
       - "5672:5672"
     volumes:
-      - "./.rabbitmq_data:/var/lib/rabbitmq/mnesia"
+      - "./data/.rabbitmq_data:/var/lib/rabbitmq/mnesia"
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=admin
@@ -17,7 +17,7 @@ services:
       - production-network
 
   api-gateway:
-    build: ./http-proxy
+    build: ./ms-api-gateway
     entrypoint: ./.docker/entrypoint.sh
     container_name: api-gateway
     networks:
@@ -35,7 +35,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./pgdata_auth:/var/lib/postgresql/data
+      - ./data/pgdata_auth:/var/lib/postgresql/data
     networks:
       - production-network
 
@@ -71,7 +71,7 @@ services:
     ports:
       - "15432:5432"
     volumes:
-      - ./pgdata_users:/var/lib/postgresql/data
+      - ./data/pgdata_users:/var/lib/postgresql/data
     networks:
       - production-network
 
@@ -99,7 +99,7 @@ services:
     ports:
       - "25432:5432"
     volumes:
-      - ./pgdata_services:/var/lib/postgresql/data
+      - ./data/pgdata_services:/var/lib/postgresql/data
     networks:
       - production-network
 
@@ -125,7 +125,7 @@ services:
     ports:
       - "35432:5432"
     volumes:
-      - ./pgdata_chats:/var/lib/postgresql/data
+      - ./data/pgdata_chats:/var/lib/postgresql/data
     networks:
       - production-network
 
