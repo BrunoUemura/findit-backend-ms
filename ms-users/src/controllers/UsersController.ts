@@ -37,23 +37,6 @@ export class UsersController {
     }
   }
 
-  // static async showUserCompletedServicesCount(
-  //   req: Request,
-  //   res: Response,
-  //   next: NextFunction
-  // ) {
-  //   const usersService = new UsersService();
-  //   const { id } = req.params;
-
-  //   try {
-  //     const userCompletedServicesCount =
-  //       await usersService.showUserCompletedServicesCount(id);
-  //     return res.json(userCompletedServicesCount);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
-
   static async getProfileImage(
     req: Request,
     res: Response,

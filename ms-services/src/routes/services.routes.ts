@@ -32,6 +32,10 @@ services
     serviceValidation,
     ServicesController.createService
   )
+  .get(
+    "/services/user/:id/completed-services/count",
+    ServicesController.showUserCompletedServicesCount
+  )
   .post(
     "/services/complete",
     authMiddleware,

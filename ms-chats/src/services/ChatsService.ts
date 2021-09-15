@@ -89,13 +89,19 @@ export class ChatsService {
       ],
     });
     if (chatExists) {
-      throw new BadRequestError("Chat room already exists");
+      return {
+        message: `Chat Room already exist ${chatExists.id}`,
+        chat_id: chatExists.id,
+      };
     }
 
     // Create Chat Room
     const data: any = this.chatsRepository.create(chatInfo);
     await this.chatsRepository.save(data);
-    return { message: `Chat Room ${data.id} created successfully!` };
+    return {
+      message: `Chat Room ${data.id} created successfully`,
+      chat_id: data.id,
+    };
   }
 
   async sendMessage(id: string, messageInfo: IMessageSend) {

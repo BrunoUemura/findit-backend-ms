@@ -85,6 +85,15 @@ export class ServicesService {
     return count;
   }
 
+  async showUserCompletedServicesCount(id: string) {
+    const [_, count] = await this.servicesCompletedRepository.findAndCount({
+      where: {
+        user_id: id,
+      },
+    });
+    return count;
+  }
+
   async createService(serviceInfo: IServicesCreate) {
     const userExists = await this.usersRepository.findOne({
       where: { id: serviceInfo.user_id },

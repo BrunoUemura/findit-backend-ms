@@ -1,7 +1,5 @@
 import { Repository, getRepository } from "typeorm";
 import { User } from "../models/User";
-// import { ServiceCompleted } from "../models/ServiceCompleted";
-// import { ServicesCompletedRepository } from "../repositories/ServicesCompletedRepository";
 import { NotFoundError } from "../errors/NotFoundError";
 import { BadRequestError } from "../errors/BadRequestError";
 import RabbitmqServer from "../config/rabbitmq-server";
@@ -34,13 +32,9 @@ interface IUsersDelete {
 
 export class UsersService {
   private usersRepository: Repository<User>;
-  // private servicesCompletedRepository: Repository<ServiceCompleted>;
 
   constructor() {
     this.usersRepository = getRepository(User);
-    // this.servicesCompletedRepository = getCustomRepository(
-    //   ServicesCompletedRepository
-    // );
   }
 
   async checkUserExists(id: string) {
@@ -67,15 +61,6 @@ export class UsersService {
     const [list, count] = await this.usersRepository.findAndCount();
     return count;
   }
-
-  // async showUserCompletedServicesCount(id: string) {
-  //   const [list, count] = await this.servicesCompletedRepository.findAndCount({
-  //     where: {
-  //       user_id: id,
-  //     },
-  //   });
-  //   return count;
-  // }
 
   async getProfileImage(id: string) {
     const userExists = await this.checkUserExists(id);

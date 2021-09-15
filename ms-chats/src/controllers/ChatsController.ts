@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { ChatsService } from "../services/ChatsService";
-import { StatusCodes } from "http-status-codes";
 import { validationResult } from "express-validator";
 import { RequestValidationError } from "../errors/RequestValidationError";
 

@@ -6,15 +6,9 @@ import { microservices } from "./config/microservices-addr";
 
 const app = express();
 
+app.use(cors());
 app.use(morgan("dev"));
-app.use(
-  cors({
-    origin: "*",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-  })
-);
+
 app.use("/api/auth", createProxyMiddleware(microservices.auth));
 app.use("/api/users", createProxyMiddleware(microservices.users));
 app.use("/api/services", createProxyMiddleware(microservices.services));

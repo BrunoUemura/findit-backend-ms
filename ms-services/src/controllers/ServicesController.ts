@@ -65,6 +65,22 @@ export class ServicesController {
     }
   }
 
+  static async showUserCompletedServicesCount(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { id } = req.params;
+      const servicesService = new ServicesService();
+
+      const service = await servicesService.showUserCompletedServicesCount(id);
+      return res.json(service);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async createService(req: Request, res: Response, next: NextFunction) {
     try {
       const errors = validationResult(req);
